@@ -1442,6 +1442,20 @@ qa = ["flake8 (==5.0.4)", "mypy (==0.971)", "types-setuptools (==67.2.0.1)"]
 testing = ["docopt", "pytest"]
 
 [[package]]
+name = "persiantools"
+version = "5.2.0"
+description = "Jalali date and datetime with other tools"
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "persiantools-5.2.0-py3-none-any.whl", hash = "sha256:9adf725638f027585b04967536400ac80e0fd90376dd6d024aabbe44b8520caa"},
+    {file = "persiantools-5.2.0.tar.gz", hash = "sha256:a2a5e33139f91b4233108bdcd780e666d01f0cbddf0b9610215b301de2735387"},
+]
+
+[package.dependencies]
+pytz = "*"
+
+[[package]]
 name = "pexpect"
 version = "4.9.0"
 description = "Pexpect allows easy control of interactive console applications."
@@ -2604,4 +2618,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "9ef368319a6b7e8d7c1c32eb868852f3da60c4edd7b433cb64b05670fc32cd3f"
+content-hash = "a74103ee1efe5a638aaf76059a4b6564ae5efac9cf285ae6250465ea5485ef4a"
