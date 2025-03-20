@@ -10,7 +10,7 @@ from starlette.middleware.cors import  CORSMiddleware
 from app.core.config import settings
 from app.core.middleware.time_logger import TimeLoggerMiddleware
 from cache import Cache
-
+from app.core.middleware.get_accept_language_middleware import GetAcceptLanguageMiddleware
 
 
 def init_logger():
@@ -74,3 +74,4 @@ if settings.BACKEND_CORS_ORIGINS:
     
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+app.add_middleware(GetAcceptLanguageMiddleware)
