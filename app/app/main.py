@@ -59,4 +59,18 @@ app = FastAPI(
 )
 
 if settings.SUB_PATH:
-    app.mount(f"{settings.}")
+    app.mount(f"{settings.SUB_PATH}", app)
+    
+    
+# Set all CORS enabled origins
+if settings.BACKEND_CORS_ORIGINS:
+    app.middleware(
+        CORSMiddleware,
+        allow_origins=settings.allow_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],        
+    )
+    
+
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
