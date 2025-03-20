@@ -18,6 +18,7 @@ pydantic = "^2.10.6"
 alembic = "^1.15.1"
 fastapi = "^0.115.11"
 pydantic-settings = "^2.8.1"
+cache = "^1.0.3"
 
 
 [tool.poetry.group.dev.dependencies]

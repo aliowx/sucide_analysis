@@ -78,6 +78,16 @@ astroid = ["astroid (>=2,<4)"]
 test = ["astroid (>=2,<4)", "pytest", "pytest-cov", "pytest-xdist"]
 
 [[package]]
+name = "cache"
+version = "1.0.3"
+description = "caching for humans"
+optional = false
+python-versions = "*"
+files = [
+    {file = "cache-1.0.3.tar.gz", hash = "sha256:ac063f2490c0794d5cf482bfff10b6339c441a6658f8f00fe653bd65b3ce85fb"},
+]
+
+[[package]]
 name = "cffi"
 version = "1.17.1"
 description = "Foreign Function Interface for Python calling C code."
@@ -2594,4 +2604,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "d343f8cef4592f004819b44cd229414c4a268796cce1ef5bf15216798a4d675e"
+content-hash = "9ef368319a6b7e8d7c1c32eb868852f3da60c4edd7b433cb64b05670fc32cd3f"
