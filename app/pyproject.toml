@@ -17,6 +17,7 @@ textblob = "^0.19.0"
 pydantic = "^2.10.6"
 alembic = "^1.15.1"
 fastapi = "^0.115.11"
+pydantic-settings = "^2.8.1"
 
 
 [tool.poetry.group.dev.dependencies]
