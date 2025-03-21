@@ -8,7 +8,8 @@ from sqlalchemy import (
     String,
     text,
     ARRAY,
-    Boolean
+    Boolean,
+    Text
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base_class import Base
@@ -19,6 +20,6 @@ class Suicide(Base):
     uid: Mapped[int] = mapped_column(Integer, index=True, nullable=True)
     age: Mapped[int] = mapped_column(Integer, nullable=True)
     gender: Mapped[str] = mapped_column(String, nullable=True)
-    narrative_le: Mapped[str] = mapped_column(String, nullable=True)
-    narrative_cme: Mapped[str] = mapped_column(String, nullable=True)
+    narrative_le: Mapped[str] = mapped_column(Text, nullable=True)
+    narrative_cme: Mapped[str] = mapped_column(Text, nullable=True)
     depressed_mood: Mapped[str] = mapped_column(String, nullable=True)     
