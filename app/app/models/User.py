@@ -23,7 +23,7 @@ class User(Base):
     
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=True)
-    is_superuser: Mapped[bool] = mapped_column(Boolean, default=False, nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean(), default=True, nullable=True)
+    is_superuser: Mapped[bool] = mapped_column(Boolean(), default=False, nullable=True)
     
     role: Mapped[str] = mapped_column(String, nullable=True, index=True)  
