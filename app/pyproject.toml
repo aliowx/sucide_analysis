@@ -20,6 +20,7 @@ fastapi = "^0.115.11"
 pydantic-settings = "^2.8.1"
 cache = "^1.0.3"
 persiantools = "^5.2.0"
+asyncpg = "^0.30.0"
 
 
 [tool.poetry.group.dev.dependencies]
