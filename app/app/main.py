@@ -72,6 +72,8 @@ if settings.BACKEND_CORS_ORIGINS:
         allow_headers=["*"],        
     )
     
-
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
+static_dir = '/app/static'
+if os.path.isdir(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+# app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.add_middleware(GetAcceptLanguageMiddleware)
