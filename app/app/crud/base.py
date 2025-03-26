@@ -104,3 +104,123 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             
         response = await db.execute(query)
         return response.scalar().all() 
+    
+    async def get_multi_ordered(
+        self,
+        db: AsyncSession,
+        skip: int = 0,
+        limit: int | None = 100,
+        order_by: list = None,
+    ) -> Sequence[Row | RowMapping | Any]:
+        if order_by is None:
+            order_by = []
+        order_by.append(self.model.id.asc())
+
+        query = (
+            select(self.model)
+            .where(self.model.is_deleted.is_(None))
+            .order_by(*order_by)
+            .offset(skip)
+        )
+        if limit is None:
+            response = await db.execute(query)
+            return response.scalars().all()
+        response = await db.execute(query.limit(limit))
+        return response.scalars().all()
+
+    async def create(
+        self, db: AsyncSession, obj_in: CreateSchemaType | dict
+    ) -> ModelType:
+        if not isinstance(obj_in, dict):
+            obj_in = jsonable_encoder(obj_in)
+        db_obj = self.model(**obj_in)  # type: ignore
+        try:
+            db.add(db_obj)
+            await db.commit()
+        except exc.IntegrityError:
+            await db.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="Resource already exists",
+            )
+        await db.refresh(db_obj)
+        return db_obj
+    
+    async def create_multi(
+        self, db: AsyncSession, objs_in: List[CreateSchemaType] | List[dict]
+    ) -> List[ModelType]:
+        for db_obj in objs_in:
+            pass
+        if not isinstance(obj_in, dict):
+            obj_in = jsonable_encoder(obj_in)
+        db_obj = self.model(**obj_in)
+        try:
+            db.add_all(db_obj)
+            await db.commit()
+        except exc.IntegrityError:
+            await db.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="One or more Resource already exists",
+            )
+        await db.refresh(db_obj)
+        return db_obj
+
+
+    async def create_multi(
+        self, db: AsyncSession, 
+        objs_in: list[CreateSchemaType] | list[dict]
+    ) -> None:
+                
+        objs = []
+        for obj_in in objs_in:
+            if not isinstance(obj_in, dict):
+                obj_in = jsonable_encoder(obj_in)
+            db_obj = self.model(**obj_in)
+            objs.append(db_obj)  
+        try:
+            db.add_all(objs)
+            await db.commit()
+        except exc.IntegrityError:
+            await db.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="Resource already exists")
+
+    async def update(
+        self,
+        db: AsyncSession,
+        db_obj: ModelType,
+        obj_in: UpdateSchemaType | dict[str, Any] | ModelType | None = None,
+    ) -> ModelType:
+        if obj_in is not None:
+            obj_data = jsonable_encoder(db_obj)
+            if isinstance(obj_in, dict):
+                update_data = obj_in
+            else:
+                update_data = obj_in.model_dump(exclude_unset=True)
+            for field in obj_data:
+                if field in update_data:
+                    setattr(db_obj, field, update_data[field])
+        if hasattr(self.model, "modified"):
+            setattr(db_obj, "modified", datetime.now())
+        db.add(db_obj)
+        await db.commit()
+        await db.refresh(db_obj)
+        return db_obj
+
+    async def remove(self, db: AsyncSession, id_: int | str) -> ModelType | None:
+        query = (
+            update(self.model)
+            .where(
+                and_(
+                    self.model.id == id_,
+                    self.model.is_deleted.is_(None),
+                )
+            )
+            .values(is_deleted=datetime.utcnow())
+            .returning(self.model)
+        )
+        response = await db.execute(query)
+        await db.commit()
+        return response.scalar_one_or_none()
