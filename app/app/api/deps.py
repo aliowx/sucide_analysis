@@ -40,5 +40,6 @@ async def get_redis()-> client.Redis:
     try:
         if await redis_client.ping():
             return redis_client
-        raise Redis.RedisError
-    except
+        raise redis.RedisError('ping error')
+    except:
+        pass 
