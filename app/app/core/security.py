@@ -54,5 +54,56 @@ class  JWTHandler:
             )
             return result
         except jwt.ExpiredSignatureError:
-            raise exc.UnauthorizedException
+            raise exc.UnauthorizedException(
+                detail="Token expired",
+                msg_code=MessageCodes.expired_token
+            )
+        except jwt.InvalidTokenError:
+            raise exc.UnauthorizedException(
+                detail="Invalid token",
+                msg_code=MessageCodes.invalid_token
+            )
         
+    @staticmethod 
+    def decode_expired(token: str)->str:
+        try:
+            return jwt.decode(
+                token,
+                JWTHandler.secret_key,
+                algorithms=[JWTHandler.algorithm],
+                options={"verify_exp": False}
+            )
+            
+        except jwt.InvalidTokenError:
+            raise exc.UnauthorizedException(
+                detail='Invalid token',
+                msg_code=MessageCodes.invalid_token
+            )
+            
+            
+    @staticmethod
+    def token_expiration(token: str)-> datetime | None:
+        try:
+            decoded_token = jwt.decode(
+                token,
+                JWTHandler.secret_key,
+                algorithms=[JWTHandler.algorithm],
+                options={"verify_exp": True},
+            )
+            exp = int(decoded_token.get("exp"))
+            if not exp:
+                raise exc.UnauthorizedException(
+                    detail='Invalid token exp',
+                    msg_code=MessageCodes.invalid_token
+                )
+            return exp
+        except jwt.ExpiredSignatureError:
+            raise exc.UnauthorizedException(
+                detail="Token expired",
+                msg_code=MessageCodes.expired_token,
+            )
+        except jwt.InvalidTokenError:
+            raise exc.UnauthorizedException(
+                detail="Invalid token",
+                msg_code=MessageCodes.invalid_token,
+            )
