@@ -12,7 +12,7 @@ export PATH="/home/User/.local/bin:$PATH"
 ```
 If you are using fish, you need to paste it in terminal
 ```
-fish_add_path /home/kamran/.local/bin
+fish_add_path /home/ali/.local/bin
 ```
 ```
 cd backend
