@@ -92,3 +92,10 @@ async def internal_exceptions_handler(request: Request, exc: Any):
 class UnauthorizedException(CustomHTTPException):
     def __init__(self, detail: str | None = None, msg_code: utils.MessageCodes = None, headers: dict | None = None,):
         super().__init__(msg_code=msg_code, detail=detail, headers=headers)
+
+
+
+class ForbiddenException(CustomHTTPException):
+    def __init__(self, detail: str | None = None, msg_code: utils.MessageCodes = None, headers: dict | None = None,):
+        super().__init__(msg_code=msg_code, detail=detail, headers=headers)
+
