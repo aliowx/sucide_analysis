@@ -25,3 +25,29 @@ async def register(
 
 
 
+async def login(
+    db: AsyncSession,
+    user_in: schemas.LoginUser
+)-> schemas.Token:
+    user = await crud.user.authenticate(
+        db=db,
+        username=user_in.Username,
+        password=user_in.password
+        
+    )
+    if not user:
+        raise exc.NotFoundException(
+            detail="Incorrect email or password",
+            msg_code=utils.MessageCodes.incorrect_email_or_password
+        )
+        
+    refresh_token = JWTHandler.encode_refresh_token(
+        payload = {"sub": "refresh", "id": str(user.id)}
+        
+    )
+    access_token = JWTHandler.encode(payload = {"sub": "refresh", "id": str(user.id)})
+    
+    return schemas.Token(
+        access_token=access_token,
+        refresh_token=refresh_token
+    )
