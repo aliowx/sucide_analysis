@@ -120,3 +120,28 @@ class AlreadyExistException(CustomHTTPException):
 class InternalErrorException(CustomHTTPException):
     def __init__(self, detail: str | None = None, msg_code: utils.MessageCodes = None, headers: dict | None = None):
         super().__init__(detail=detail, msg_code=msg_code, headers=headers)
+        
+        
+        
+
+# Create a dictionary of exception handlers
+exception_handlers = {
+    Exception: internal_exceptions_handler,
+    HTTPException: http_exception_handler,
+    ValidationException: create_exception_handler(status.HTTP_400_BAD_REQUEST),
+    NotFoundException: create_exception_handler(status.HTTP_404_NOT_FOUND),
+    AlreadyExistException: create_exception_handler(status.HTTP_409_CONFLICT),
+    InternalErrorException: create_exception_handler(
+        status.HTTP_500_INTERNAL_SERVER_ERROR
+    ),
+    UnauthorizedException: create_exception_handler(status.HTTP_401_UNAUTHORIZED),
+    ForbiddenException: create_exception_handler(status.HTTP_403_FORBIDDEN),
+    RequestValidationError: create_system_exception_handler(
+        status.HTTP_400_BAD_REQUEST, msg_code=utils.MessageCodes.bad_request
+    ),
+    ResponseValidationError: create_system_exception_handler(
+        status.HTTP_400_BAD_REQUEST, msg_code=utils.MessageCodes.internal_error
+    ),
+}
+
+
