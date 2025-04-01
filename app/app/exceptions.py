@@ -144,4 +144,7 @@ exception_handlers = {
     ),
 }
 
-
+async def handle_exception(request: Request, exc: Any):
+    exc_type = type(exc)
+    handler = exception_handlers.get(exc_type, internal_exceptions_handler)
+    return await handler(request=request,exc=exc)
