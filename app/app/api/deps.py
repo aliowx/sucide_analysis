@@ -120,6 +120,5 @@ async def get_current_user_from_cookie(
         raise exc.ForbiddenException(
             msg_code=utils.MessageCodes.inactive_user
         )
-        
-        
+    
     return current_user
