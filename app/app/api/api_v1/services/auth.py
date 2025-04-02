@@ -51,3 +51,36 @@ async def login(
         access_token=access_token,
         refresh_token=refresh_token
     )
+    
+async def logout(
+    refresh_token: str,
+    access_token: str,
+    cache: client.Redis
+):
+    if not cache:
+        raise exc.InternalErrorException(
+            detail='Redis connection is not initialized',
+            msg_code=utils.MessageCodes.internal_error
+        )
+        
+        
+    try:
+        if refresh_token:
+            refresh_token_key = REFRESH_TOKEN_BLOCKLIST_KEY.format(token=refresh_token)
+            await cache.set(
+                refresh_token_key,
+                time.time(),
+                ex=JWTHandler.token_expiration(refresh_token),
+            )
+    except exc.UnauthorizedException:...
+    
+    
+    try:
+        if access_token:
+            access_token_key =  ACCESS_TOKEN_BLOCKLIST_KEY.forma(token=access_token)
+            await cache.set(
+                access_token,
+                time.time(),
+                ex=JWTHandler.token_expiration(access_token)
+            )
+    except exc.UnauthorizedException:...
